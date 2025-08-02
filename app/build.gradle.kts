@@ -65,5 +65,22 @@ dependencies {
 
     implementation(libs.androidx.runtime.tracing)
     implementation(libs.androidx.tracing.ktx)
+    debugImplementation(libs.rebugger)
+
+    // ViewModel core support
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+// ViewModel support for Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+// SavedStateHandle in ViewModel (optional, for process death recovery)
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
+
+// LiveData (optional, if you're using LiveData with ViewModel)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+// Lifecycle runtime extensions
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
 
 }

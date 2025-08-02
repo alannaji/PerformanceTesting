@@ -1,43 +1,49 @@
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.channels.ticker
+import androidx.compose.ui.util.trace
 import kotlinx.coroutines.delay
 
 @Composable
-fun MainScreen(
+fun ColumnBasedScreen(
     modifier: Modifier = Modifier
 ) {
     val ticker = remember { mutableIntStateOf(0) }
 
-    // ⚠️ Artificially triggers recomposition every 50ms
+    // ⚠️ Artificially triggers recomposition every 10ms
     LaunchedEffect(Unit) {
         while (true) {
-            ticker.value++
-            delay(50)
+            ticker.intValue++
+            delay(10)
         }
     }
 
     Box(modifier = modifier) {
-        LazyColumn(modifier = modifier) {
-            items(100) { index ->
-                // 🚨 Every item depends on ticker.value = RECOMPOSITION BAIT
-                NumberRow(
-                    index = index,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    ticker = ticker.value
-                )
+        trace("Column Screen") {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
+                repeat(200) {
+                    trace("NumberRow") {
+                        NumberRow(
+                            index = it,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            ticker = ticker.intValue
+                        )
+                    }
+                }
             }
         }
     }
